@@ -6,8 +6,40 @@ import { formatAddress } from "@/lib/formatters";
 import { CopyButton } from "@/components/CopyButton";
 import { SecureExternalLink } from "@/components/SecureExternalLink";
 
+function getWalletRetryMessage(error: string) {
+  const normalizedError = error.toLowerCase();
+
+  if (
+    normalizedError.includes("reject") ||
+    normalizedError.includes("denied") ||
+    normalizedError.includes("cancel") ||
+    normalizedError.includes("user declined") ||
+    normalizedError.includes("user closed")
+  ) {
+    return "Wallet access was rejected. Try connecting again when you are ready.";
+  }
+
+  if (
+    normalizedError.includes("freighter") ||
+    normalizedError.includes("not installed") ||
+    normalizedError.includes("unavailable") ||
+    normalizedError.includes("not found")
+  ) {
+    return "Freighter is not available. Install or unlock Freighter, then try again.";
+  }
+
+  if (
+    normalizedError.includes("timeout") ||
+    normalizedError.includes("timed out")) {
+    return "The wallet request timed out. Open Freighter and try connecting again.";
+  }
+
+  return "We could not connect to Freighter. Check your wallet and try again.";
+}
+
 export const WalletConnect = () => {
   const { address, isConnecting, connect, disconnect, isFreighterInstalled, error } = useFreighter();
+  const retryMessage = error ? getWalletRetryMessage(error) : null;
 
   if (!isFreighterInstalled) {
     return (
@@ -70,7 +102,7 @@ export const WalletConnect = () => {
       >
         Connect Wallet
       </button>
-      {error && <span className="text-[10px] text-red-500">{error}</span>}
+      {retryMessage && <span className="max-w-56 text-right text-[10px] text-red-500">{retryMessage}</span>}
     </div>
   );
 };
