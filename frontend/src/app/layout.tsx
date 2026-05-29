@@ -14,6 +14,7 @@ const DiagnosticsPanel = dynamic(() => import("@/components/DiagnosticsPanel").t
 });
 import { ToastContainer } from "@/components/Toast";
 import { NetworkMismatchBanner } from "@/components/NetworkMismatchBanner";
+import { DesktopNav } from "@/components/DesktopNav";
 import { MobileNav } from "@/components/MobileNav";
 import { RouteTracker } from "@/components/RouteTracker";
 
@@ -120,11 +121,7 @@ export default function RootLayout({
                   </span>
                 </Link>
                 
-                <div className="hidden md:flex items-center space-x-1">
-                  <Link href="/" className="nav-link px-4">Dashboard</Link>
-                  <Link href="/treasury" className="nav-link px-4">Treasury</Link>
-                  <Link href="/governance" className="nav-link px-4">Governance</Link>
-                </div>
+                <DesktopNav />
 
                 <div className="flex items-center space-x-4">
                   <WalletConnect />
